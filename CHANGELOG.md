@@ -1,5 +1,13 @@
 # Changelog / 変更履歴
 
+## [1.20.1-1.0.0-alpha.6] - 2026-11-19
+
+### English
+- Added a second zero-overhead protection layer in `InventoryMixin` (`Inventory#add(ItemStack)` and `Inventory#add(int, ItemStack)`) to prevent other mods from stripping equipped/locked items by passing live slot `ItemStack` instances into `Player#addItem` / `Inventory#add` (which internally sets the source stack's count to 0).
+
+### 日本語
+- `InventoryMixin`（`Inventory#add(ItemStack)` および `Inventory#add(int, ItemStack)`）に2つ目のゼロ負荷保護ロジックを追加し、装備中・ロック済みアイテムの `ItemStack` を直接 `Player#addItem` / `Inventory#add` に渡して別スロットへ強制移動（元のスロットのカウントを0にして剥がす挙動）させる処理を汎用的にブロックするようにしました。
+
 ## [1.20.1-1.0.0-alpha.5] - 2026-11-19
 
 ### English

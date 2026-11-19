@@ -81,4 +81,18 @@ public abstract class InventoryMixin {
             ci.cancel();
         }
     }
+
+    @Inject(method = "add(Lnet/minecraft/world/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
+    private void myEnchantAdded$preventAddLockedItem(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+        if (!this.player.level().isClientSide() && RockEnchantment.isLocked(stack)) {
+            cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "add(ILnet/minecraft/world/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
+    private void myEnchantAdded$preventAddLockedItemAtSlot(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+        if (!this.player.level().isClientSide() && RockEnchantment.isLocked(stack)) {
+            cir.setReturnValue(false);
+        }
+    }
 }
