@@ -1,5 +1,13 @@
 # Changelog / 変更履歴
 
+## [1.20.1-1.0.0-beta.1] - 2026-11-19
+
+### English
+- Promoted to **Beta 1** (`1.20.1-1.0.0-beta.1`) after stabilizing all 7 enchantments, compatibility fixes, and multi-layered **Rock** item protection.
+
+### 日本語
+- 全7種類のエンチャントの挙動・互換性および **Rock (ロック)** の多層保護機構を安定化し、**Beta 1** (`1.20.1-1.0.0-beta.1`) として公開準備を完了。
+
 ## [1.20.1-1.0.0-alpha.7] - 2026-11-19
 
 ### English
@@ -29,11 +37,11 @@
 ## [1.20.1-1.0.0-alpha.4] - 2026-11-19
 
 ### English
-- Fixed a `StackOverflowError` in `RatioSharpnessEnchantment` and `AutomaticRepairEnchantment` caused by mutual recursion between `canEnchant` and `canApplyAtEnchantingTable` (notably with Apotheosis).
+- Fixed a `StackOverflowError` in `RatioSharpnessEnchantment` and `AutomaticRepairEnchantment` caused by mutual recursion between `canEnchant` and `canApplyAtEnchantingTable`.
 - Added server-side locked-slot snapshot enforcement in `PlayerTickEvent`, `ItemEntityMixin` discard protection, and `PlayerInteractEvent.RightClickItem` cancellation for locked armor to prevent forced unequipping, drops, and right-click equipping.
 
 ### 日本語
-- `RatioSharpnessEnchantment` および `AutomaticRepairEnchantment` において `canEnchant` と `canApplyAtEnchantingTable` が相互再帰して `StackOverflowError` でクラッシュする不具合（Apotheosis 等との併用時）を修正。
+- `RatioSharpnessEnchantment` および `AutomaticRepairEnchantment` において `canEnchant` と `canApplyAtEnchantingTable` が相互再帰して `StackOverflowError` でクラッシュする不具合を修正。
 - サーバー側 `PlayerTickEvent` によるロックスロットのスナップショット復元、`ItemEntityMixin` によるドロップアイテム破棄、およびロック済み防具の右クリック装備 (`PlayerInteractEvent.RightClickItem`) キャンセルを追加し、他MODによる直接的な防具剥奪や強制ドロップへの耐性を強化。
 
 ## [1.20.1-1.0.0-alpha.3] - 2026-11-19
