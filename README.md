@@ -21,7 +21,7 @@ My Enchant Added is a Minecraft 1.20.1 (Forge) mod adding 7 enchantments designe
 
 ### Installation
 1. Install Minecraft 1.20.1 and Forge 47.3.0+.
-2. Put `my_enchant_added-1.20.1-1.0.0-alpha.4.jar` into your `mods` folder.
+2. Put `my_enchant_added-1.20.1-1.0.0-alpha.5.jar` into your `mods` folder.
 3. Launch Minecraft.
 
 ---
@@ -42,5 +42,5 @@ My Enchant Added は、他MODとの互換性と安定した挙動を意識して
 
 ### 導入方法
 1. Minecraft 1.20.1 および Forge 47.3.0 以降を導入します。
-2. `my_enchant_added-1.20.1-1.0.0-alpha.4.jar` を `mods` フォルダに配置します。
+2. `my_enchant_added-1.20.1-1.0.0-alpha.5.jar` を `mods` フォルダに配置します。
 3. Minecraft を起動します。

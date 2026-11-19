@@ -1,5 +1,13 @@
 # Changelog / 変更履歴
 
+## [1.20.1-1.0.0-alpha.5] - 2026-11-19
+
+### English
+- Replaced per-tick locked-slot snapshot polling with zero-overhead, event-driven `NonNullList#set` interception (`NonNullListMixin` bound to player `Inventory` lists), preventing direct list tampering in-place without tick overhead or equipment-change side effects.
+
+### 日本語
+- 毎tickのスナップショット監視を廃止し、プレイヤーの `Inventory` リストに紐づけた `NonNullList#set` へのゼロオーバーヘッドな割り込み保護（`NonNullListMixin`）へ置き換えました。これにより、負荷や装備変更イベントの副作用なしにインベントリ配列への直接改変をその場で阻止します。
+
 ## [1.20.1-1.0.0-alpha.4] - 2026-11-19
 
 ### English

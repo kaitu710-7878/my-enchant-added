@@ -1,6 +1,8 @@
 package dev.modding.myenchantadded.mixin;
 
 import dev.modding.myenchantadded.enchantment.RockEnchantment;
+import dev.modding.myenchantadded.util.OwnedInventoryList;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Prevents removing or overwriting Rock-locked items in player inventory on the server.
+ * Prevents removing or overwriting Rock-locked items in player inventory on the server,
+ * and associates the player's inventory lists with their owner for direct list protection.
  */
 @Mixin(Inventory.class)
 public abstract class InventoryMixin {
@@ -23,10 +26,29 @@ public abstract class InventoryMixin {
     public Player player;
 
     @Shadow
+    @Final
+    public NonNullList<ItemStack> items;
+
+    @Shadow
+    @Final
+    public NonNullList<ItemStack> armor;
+
+    @Shadow
+    @Final
+    public NonNullList<ItemStack> offhand;
+
+    @Shadow
     public abstract ItemStack getSelected();
 
     @Shadow
     public abstract ItemStack getItem(int index);
+
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void myEnchantAdded$bindInventoryLists(Player player, CallbackInfo ci) {
+        ((OwnedInventoryList) (Object) this.items).myEnchantAdded$setOwner(player);
+        ((OwnedInventoryList) (Object) this.armor).myEnchantAdded$setOwner(player);
+        ((OwnedInventoryList) (Object) this.offhand).myEnchantAdded$setOwner(player);
+    }
 
     @Inject(method = "removeFromSelected", at = @At("HEAD"), cancellable = true)
     private void myEnchantAdded$preventRemoveLockedSelected(boolean entireStack, CallbackInfoReturnable<ItemStack> cir) {

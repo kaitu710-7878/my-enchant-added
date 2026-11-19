@@ -4,7 +4,6 @@ import dev.modding.myenchantadded.MyEnchantAddedMod;
 import dev.modding.myenchantadded.enchantment.RockEnchantment;
 import dev.modding.myenchantadded.registry.ModEnchantments;
 import dev.modding.myenchantadded.util.EnchantmentMath;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
@@ -20,7 +19,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -56,22 +54,8 @@ public final class CommonEvents {
     private static final UUID RATIO_SHARPNESS_UUID = UUID.fromString("8a3e1004-5b11-4d9a-9a01-400000000001");
 
     private static final Map<UUID, Map<Integer, Double>> REPAIR_ACCUMULATORS = new ConcurrentHashMap<>();
-    private static final Map<UUID, Map<Integer, ItemStack>> LOCKED_SNAPSHOTS = new ConcurrentHashMap<>();
 
     private CommonEvents() {
-    }
-
-    public static void setLockedSnapshot(Player player, int slotIndex, ItemStack stack) {
-        LOCKED_SNAPSHOTS
-                .computeIfAbsent(player.getUUID(), id -> new HashMap<>())
-                .put(slotIndex, stack);
-    }
-
-    public static void clearLockedSnapshot(Player player, int slotIndex) {
-        Map<Integer, ItemStack> snapshots = LOCKED_SNAPSHOTS.get(player.getUUID());
-        if (snapshots != null) {
-            snapshots.remove(slotIndex);
-        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -187,12 +171,6 @@ public final class CommonEvents {
         }
         Player player = event.player;
         Inventory inventory = player.getInventory();
-
-        // Protect Rock-locked items from direct NonNullList/slot tampering by other mods
-        if (player.isAlive()) {
-            enforceLockedSnapshots(player, inventory);
-        }
-
         Map<Integer, Double> slotAccumulators = REPAIR_ACCUMULATORS.computeIfAbsent(player.getUUID(), id -> new HashMap<>());
 
         int size = inventory.getContainerSize();
@@ -223,93 +201,9 @@ public final class CommonEvents {
         }
     }
 
-    private static void enforceLockedSnapshots(Player player, Inventory inventory) {
-        Map<Integer, ItemStack> snapshots = LOCKED_SNAPSHOTS.computeIfAbsent(player.getUUID(), id -> new HashMap<>());
-        int size = inventory.getContainerSize();
-        boolean restoredAny = false;
-
-        for (Map.Entry<Integer, ItemStack> entry : new HashMap<>(snapshots).entrySet()) {
-            int slotIndex = entry.getKey();
-            ItemStack expected = entry.getValue();
-
-            // If the item broke naturally (count reached 0 on the same instance), stop tracking it
-            if (expected.isEmpty() || !RockEnchantment.isLocked(expected)) {
-                snapshots.remove(slotIndex);
-                continue;
-            }
-
-            ItemStack actual = inventory.getItem(slotIndex);
-            if (actual == expected) {
-                continue;
-            }
-            if (!actual.isEmpty() && ItemStack.isSameItemSameTags(actual, expected) && actual.getCount() == expected.getCount()) {
-                snapshots.put(slotIndex, actual);
-                continue;
-            }
-
-            // Item was forcibly removed or moved from its locked slot; remove any moved copy and restore
-            for (int other = 0; other < size; other++) {
-                if (other == slotIndex || snapshots.containsKey(other)) {
-                    continue;
-                }
-                ItemStack candidate = inventory.getItem(other);
-                if (!candidate.isEmpty() && ItemStack.isSameItemSameTags(candidate, expected) && RockEnchantment.isLocked(candidate)) {
-                    setInventorySlotDirect(inventory, other, ItemStack.EMPTY);
-                    break;
-                }
-            }
-
-            setInventorySlotDirect(inventory, slotIndex, expected);
-            restoredAny = true;
-        }
-
-        // Refresh snapshots for all currently locked slots
-        for (int i = 0; i < size; i++) {
-            ItemStack stack = inventory.getItem(i);
-            if (!stack.isEmpty() && RockEnchantment.isLocked(stack)) {
-                snapshots.put(i, stack);
-            } else {
-                snapshots.remove(i);
-            }
-        }
-
-        if (restoredAny) {
-            inventory.setChanged();
-            player.inventoryMenu.broadcastChanges();
-            if (player instanceof ServerPlayer serverPlayer && serverPlayer.containerMenu != serverPlayer.inventoryMenu) {
-                serverPlayer.containerMenu.broadcastChanges();
-            }
-        }
-    }
-
-    private static void setInventorySlotDirect(Inventory inventory, int slotIndex, ItemStack stack) {
-        if (slotIndex < inventory.items.size()) {
-            inventory.items.set(slotIndex, stack);
-            return;
-        }
-        int armorIdx = slotIndex - inventory.items.size();
-        if (armorIdx < inventory.armor.size()) {
-            inventory.armor.set(armorIdx, stack);
-            return;
-        }
-        int offhandIdx = armorIdx - inventory.armor.size();
-        if (offhandIdx < inventory.offhand.size()) {
-            inventory.offhand.set(offhandIdx, stack);
-        }
-    }
-
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
-        UUID uuid = event.getEntity().getUUID();
-        REPAIR_ACCUMULATORS.remove(uuid);
-        LOCKED_SNAPSHOTS.remove(uuid);
-    }
-
-    @SubscribeEvent
-    public static void onLivingDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof Player player) {
-            LOCKED_SNAPSHOTS.remove(player.getUUID());
-        }
+        REPAIR_ACCUMULATORS.remove(event.getEntity().getUUID());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
