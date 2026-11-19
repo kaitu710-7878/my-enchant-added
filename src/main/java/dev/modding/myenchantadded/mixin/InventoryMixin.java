@@ -3,6 +3,7 @@ package dev.modding.myenchantadded.mixin;
 import dev.modding.myenchantadded.enchantment.RockEnchantment;
 import dev.modding.myenchantadded.util.OwnedInventoryList;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -11,8 +12,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Prevents removing or overwriting Rock-locked items in player inventory on the server,
@@ -36,6 +41,10 @@ public abstract class InventoryMixin {
     @Shadow
     @Final
     public NonNullList<ItemStack> offhand;
+
+    @Shadow
+    @Final
+    private List<NonNullList<ItemStack>> compartments;
 
     @Shadow
     public abstract ItemStack getSelected();
@@ -94,5 +103,28 @@ public abstract class InventoryMixin {
         if (!this.player.level().isClientSide() && RockEnchantment.isLocked(stack)) {
             cir.setReturnValue(false);
         }
+    }
+
+    @ModifyVariable(method = "clearOrCountMatchingItems", at = @At("HEAD"), argsOnly = true)
+    private Predicate<ItemStack> myEnchantAdded$skipLockedOnClear(Predicate<ItemStack> predicate) {
+        if (this.player.level().isClientSide()) {
+            return predicate;
+        }
+        return stack -> !RockEnchantment.isLocked(stack) && predicate.test(stack);
+    }
+
+    @Inject(method = "clearContent", at = @At("HEAD"), cancellable = true)
+    private void myEnchantAdded$preserveLockedOnClearContent(CallbackInfo ci) {
+        if (this.player.level().isClientSide()) {
+            return;
+        }
+        for (List<ItemStack> list : this.compartments) {
+            for (int i = 0; i < list.size(); i++) {
+                if (!RockEnchantment.isLocked(list.get(i))) {
+                    list.set(i, ItemStack.EMPTY);
+                }
+            }
+        }
+        ci.cancel();
     }
 }

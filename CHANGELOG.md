@@ -1,5 +1,15 @@
 # Changelog / 変更履歴
 
+## [1.20.1-1.0.0-alpha.7] - 2026-11-19
+
+### English
+- Prevented right-click armor swapping when the target equipment slot holds a **Rock**-locked item (`PlayerInteractEvent.RightClickItem`).
+- Protected **Rock**-locked items from `/clear` commands and `clearContent` via `InventoryMixin` (`clearOrCountMatchingItems` and `clearContent`).
+
+### 日本語
+- 装備先スロットに **Rock (ロック)** 状態の防具が装備されている場合、別防具を持って右クリックすることによる防具入れ替えをキャンセルするよう修正。
+- `InventoryMixin`（`clearOrCountMatchingItems` および `clearContent`）により、`/clear` コマンドやインベントリ全消去処理からロック済みアイテムを保護するよう対応。
+
 ## [1.20.1-1.0.0-alpha.6] - 2026-11-19
 
 ### English

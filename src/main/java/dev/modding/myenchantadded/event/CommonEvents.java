@@ -209,11 +209,20 @@ public final class CommonEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         ItemStack stack = event.getItemStack();
-        if (!stack.isEmpty() && RockEnchantment.isLocked(stack)) {
-            if (stack.getItem() instanceof Equipable || Mob.getEquipmentSlotForItem(stack).getType() == EquipmentSlot.Type.ARMOR) {
-                event.setCanceled(true);
-                event.setCancellationResult(InteractionResult.FAIL);
-            }
+        if (stack.isEmpty()) {
+            return;
+        }
+        boolean isEquipableArmor = stack.getItem() instanceof Equipable
+                || Mob.getEquipmentSlotForItem(stack).getType() == EquipmentSlot.Type.ARMOR;
+        if (!isEquipableArmor) {
+            return;
+        }
+        // Cancel if the held item itself is locked, or if the target equipment slot holds a locked item
+        EquipmentSlot targetSlot = Mob.getEquipmentSlotForItem(stack);
+        if (RockEnchantment.isLocked(stack)
+                || RockEnchantment.isLocked(event.getEntity().getItemBySlot(targetSlot))) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.FAIL);
         }
     }
 
