@@ -1,5 +1,17 @@
 # Changelog / 変更履歴
 
+## [1.20.1-1.0.0-alpha.3] - 2026-11-19
+
+### English
+- Fixed **Rock** lock/unlock toggling across all container screens (including Creative inventory) by using the underlying inventory slot index (`Slot#getSlotIndex()`).
+- Strengthened **Rock** forced-drop protection generically via `Player#setItemSlot`, `Inventory#removeItem`, `Inventory#removeItemNoUpdate`, `Inventory#setItem`, and `EntityJoinLevelEvent` (`ItemEntity` spawn cancellation).
+- Added clarification about **Ratio Sharpness** scaling only the weapon modifier (excluding unarmed base damage of `1`) in `README.md` and language files.
+
+### 日本語
+- **Rock (ロック)** のロック/解除切り替えがクリエイティブ画面等を含む全インベントリ画面で確実に機能するよう、インベントリ実スロットインデックス (`Slot#getSlotIndex()`) を使用するよう修正。
+- **Rock (ロック)** の強制ドロップ無力化を汎用的に強化（`Player#setItemSlot`、`Inventory#removeItem` / `removeItemNoUpdate` / `setItem` の保護、および `EntityJoinLevelEvent` での `ItemEntity` スポーン抑止を追加）。
+- **Ratio Sharpness (割合鋭利)** が素手の攻撃力(1)を除いた武器補正のみを増加させる仕様について、`README.md` および言語ファイルに補足を追記。
+
 ## [1.20.1-1.0.0-alpha.2] - 2026-11-19
 
 ### English

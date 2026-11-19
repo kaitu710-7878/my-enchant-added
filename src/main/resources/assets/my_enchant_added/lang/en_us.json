@@ -8,7 +8,7 @@
   "enchantment.my_enchant_added.haste": "Haste",
   "enchantment.my_enchant_added.haste.desc": "Increases movement speed by 7.5% per level when worn on boots.",
   "enchantment.my_enchant_added.ratio_sharpness": "Ratio Sharpness",
-  "enchantment.my_enchant_added.ratio_sharpness.desc": "Increases weapon attack damage by 4% per level.",
+  "enchantment.my_enchant_added.ratio_sharpness.desc": "Increases the weapon's attack damage modifier by 4% per level (base unarmed damage of 1 is not scaled).",
   "enchantment.my_enchant_added.rock": "Rock",
   "enchantment.my_enchant_added.rock.desc": "Right-click in inventory to lock or unlock the item, preventing drops, movement, and forced drops.",
   "enchantment.my_enchant_added.automatic_repair": "Automatic Repair",

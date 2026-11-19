@@ -54,7 +54,7 @@ public final class ClientEvents {
         if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT
                 && containerScreen.getMenu().getCarried().isEmpty()
                 && slotStack.getEnchantmentLevel(ModEnchantments.ROCK.get()) > 0) {
-            ModNetwork.CHANNEL.sendToServer(new ToggleRockLockPacket(containerScreen.getMenu().containerId, hoveredSlot.index));
+            ModNetwork.CHANNEL.sendToServer(new ToggleRockLockPacket(hoveredSlot.getSlotIndex()));
             player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.4F, 1.2F);
             event.setCanceled(true);
             return;
