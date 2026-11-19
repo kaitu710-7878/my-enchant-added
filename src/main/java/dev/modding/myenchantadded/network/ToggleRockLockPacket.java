@@ -1,6 +1,7 @@
 package dev.modding.myenchantadded.network;
 
 import dev.modding.myenchantadded.enchantment.RockEnchantment;
+import dev.modding.myenchantadded.event.CommonEvents;
 import dev.modding.myenchantadded.registry.ModEnchantments;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,7 +40,12 @@ public record ToggleRockLockPacket(int inventorySlotIndex) {
 
         ItemStack stack = inventory.getItem(msg.inventorySlotIndex);
         if (!stack.isEmpty() && stack.getEnchantmentLevel(ModEnchantments.ROCK.get()) > 0) {
-            RockEnchantment.toggleLock(stack);
+            boolean nowLocked = RockEnchantment.toggleLock(stack);
+            if (nowLocked) {
+                CommonEvents.setLockedSnapshot(player, msg.inventorySlotIndex, stack);
+            } else {
+                CommonEvents.clearLockedSnapshot(player, msg.inventorySlotIndex);
+            }
             inventory.setChanged();
             player.inventoryMenu.broadcastChanges();
             if (player.containerMenu != player.inventoryMenu) {

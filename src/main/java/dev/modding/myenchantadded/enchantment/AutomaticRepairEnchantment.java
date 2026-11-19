@@ -31,14 +31,18 @@ public class AutomaticRepairEnchantment extends Enchantment {
         return 1;
     }
 
+    private boolean isRepairable(ItemStack stack) {
+        return !stack.isEmpty() && (stack.isDamageableItem() || this.category.canEnchant(stack.getItem()));
+    }
+
     @Override
     public boolean canEnchant(ItemStack stack) {
-        return stack.isDamageableItem() || super.canEnchant(stack);
+        return isRepairable(stack);
     }
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
-        return stack.isDamageableItem() || super.canApplyAtEnchantingTable(stack);
+        return isRepairable(stack);
     }
 
     /**

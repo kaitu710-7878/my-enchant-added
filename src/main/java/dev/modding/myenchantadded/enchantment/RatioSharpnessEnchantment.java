@@ -33,15 +33,19 @@ public class RatioSharpnessEnchantment extends Enchantment {
         return 5;
     }
 
+    private boolean isApplicableWeapon(ItemStack stack) {
+        return !stack.isEmpty() && (stack.getItem() instanceof SwordItem
+                || stack.getItem() instanceof AxeItem
+                || this.category.canEnchant(stack.getItem()));
+    }
+
     @Override
     public boolean canEnchant(ItemStack stack) {
-        return stack.getItem() instanceof SwordItem
-                || stack.getItem() instanceof AxeItem
-                || super.canEnchant(stack);
+        return isApplicableWeapon(stack);
     }
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
-        return canEnchant(stack);
+        return isApplicableWeapon(stack);
     }
 }
