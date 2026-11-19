@@ -50,6 +50,17 @@ class EnchantmentMathTest {
     }
 
     @Test
+    void ratioSharpnessScalesWeaponAttackAdditionAttribute() {
+        // Diamond sword weapon modifier (+6.0 ADDITION) with Level 5 (+20%) -> +1.2 bonus
+        assertEquals(1.2D, EnchantmentMath.computeRatioSharpnessBonus(6.0D, 5), 1e-9D);
+        // Level 1 (+4%) on +10.0 weapon -> +0.4 bonus
+        assertEquals(0.4D, EnchantmentMath.computeRatioSharpnessBonus(10.0D, 1), 1e-9D);
+        // Zero/non-positive values return 0
+        assertEquals(0.0D, EnchantmentMath.computeRatioSharpnessBonus(0.0D, 5), 1e-9D);
+        assertEquals(0.0D, EnchantmentMath.computeRatioSharpnessBonus(6.0D, 0), 1e-9D);
+    }
+
+    @Test
     void attributeConstantsMatchSpecification() {
         assertEquals(0.4D, EnchantmentMath.ARMOR_PER_LEVEL, 1e-9D);
         assertEquals(0.3D, EnchantmentMath.HARDNESS_TOUGHNESS_PER_LEVEL, 1e-9D);

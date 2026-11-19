@@ -26,6 +26,17 @@ public final class EnchantmentMath {
     }
 
     /**
+     * Computes the flat weapon attack damage bonus from Ratio Sharpness based on the weapon's
+     * existing ADDITION attack damage modifiers (4% per level).
+     */
+    public static double computeRatioSharpnessBonus(double weaponAttackAddition, int level) {
+        if (weaponAttackAddition <= 0.0D || level <= 0) {
+            return 0.0D;
+        }
+        return weaponAttackAddition * (RATIO_SHARPNESS_DAMAGE_MULTIPLIER_PER_LEVEL * level);
+    }
+
+    /**
      * Steps the fractional durability repair accumulator by one tick (0.01% of maxDamage).
      *
      * @param currentAccumulator accumulated fractional repair points in [0, 1)

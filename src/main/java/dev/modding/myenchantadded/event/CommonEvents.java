@@ -69,6 +69,40 @@ public final class CommonEvents {
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void onWeaponAttributeModifier(ItemAttributeModifierEvent event) {
+        ItemStack stack = event.getItemStack();
+        if (stack.isEmpty() || event.getSlotType() != EquipmentSlot.MAINHAND) {
+            return;
+        }
+
+        int ratioSharpnessLevel = stack.getEnchantmentLevel(ModEnchantments.RATIO_SHARPNESS.get());
+        if (ratioSharpnessLevel <= 0) {
+            return;
+        }
+
+        double weaponAttackAddition = 0.0D;
+        for (AttributeModifier modifier : event.getModifiers().get(Attributes.ATTACK_DAMAGE)) {
+            if (modifier.getOperation() == AttributeModifier.Operation.ADDITION
+                    && !RATIO_SHARPNESS_UUID.equals(modifier.getId())) {
+                weaponAttackAddition += modifier.getAmount();
+            }
+        }
+
+        double bonus = EnchantmentMath.computeRatioSharpnessBonus(weaponAttackAddition, ratioSharpnessLevel);
+        if (bonus > 0.0D) {
+            event.addModifier(
+                    Attributes.ATTACK_DAMAGE,
+                    new AttributeModifier(
+                            RATIO_SHARPNESS_UUID,
+                            "MyEnchantAdded Ratio Sharpness",
+                            bonus,
+                            AttributeModifier.Operation.ADDITION
+                    )
+            );
+        }
+    }
+
     @SubscribeEvent
     public static void onItemAttributeModifier(ItemAttributeModifierEvent event) {
         ItemStack stack = event.getItemStack();
@@ -121,21 +155,6 @@ public final class CommonEvents {
                             )
                     );
                 }
-            }
-        }
-
-        if (eventSlot == EquipmentSlot.MAINHAND) {
-            int ratioSharpnessLevel = stack.getEnchantmentLevel(ModEnchantments.RATIO_SHARPNESS.get());
-            if (ratioSharpnessLevel > 0) {
-                event.addModifier(
-                        Attributes.ATTACK_DAMAGE,
-                        new AttributeModifier(
-                                RATIO_SHARPNESS_UUID,
-                                "MyEnchantAdded Ratio Sharpness",
-                                EnchantmentMath.RATIO_SHARPNESS_DAMAGE_MULTIPLIER_PER_LEVEL * ratioSharpnessLevel,
-                                AttributeModifier.Operation.MULTIPLY_BASE
-                        )
-                );
             }
         }
     }
