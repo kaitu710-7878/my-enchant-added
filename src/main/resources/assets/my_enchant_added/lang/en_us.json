@@ -1,0 +1,18 @@
+{
+  "enchantment.my_enchant_added.simple_protection": "Simple Protection",
+  "enchantment.my_enchant_added.simple_protection.desc": "Reduces incoming damage by a flat 0.01 per level (stacks across armor) after all other reductions.",
+  "enchantment.my_enchant_added.armor": "Armor",
+  "enchantment.my_enchant_added.armor.desc": "Increases armor by 0.4 per level when equipped.",
+  "enchantment.my_enchant_added.hardness": "Hardness",
+  "enchantment.my_enchant_added.hardness.desc": "Increases armor toughness by 0.3 per level when equipped.",
+  "enchantment.my_enchant_added.haste": "Haste",
+  "enchantment.my_enchant_added.haste.desc": "Increases movement speed by 7.5% per level when worn on boots.",
+  "enchantment.my_enchant_added.ratio_sharpness": "Ratio Sharpness",
+  "enchantment.my_enchant_added.ratio_sharpness.desc": "Increases weapon attack damage by 4% per level.",
+  "enchantment.my_enchant_added.rock": "Rock",
+  "enchantment.my_enchant_added.rock.desc": "Right-click in inventory to lock or unlock the item, preventing drops, movement, and forced drops.",
+  "enchantment.my_enchant_added.automatic_repair": "Automatic Repair",
+  "enchantment.my_enchant_added.automatic_repair.desc": "Repairs 0.01% of maximum durability every tick.",
+  "tooltip.my_enchant_added.rock.locked": "[Locked] Right-click in inventory to unlock",
+  "tooltip.my_enchant_added.rock.unlocked": "[Unlocked] Right-click in inventory to lock"
+}

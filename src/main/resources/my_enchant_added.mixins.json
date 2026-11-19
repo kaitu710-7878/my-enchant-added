@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.modding.myenchantadded.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "my_enchant_added.mixins.refmap.json",
+  "mixins": [
+    "AbstractContainerMenuMixin",
+    "InventoryMixin",
+    "PlayerMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "enchantment.my_enchant_added.simple_protection": "シンプルプロテクション",
+  "enchantment.my_enchant_added.simple_protection.desc": "他のすべての軽減計算後に受けるダメージをレベルごとに固定値0.01軽減します（防具間で合算）。",
+  "enchantment.my_enchant_added.armor": "アーマー",
+  "enchantment.my_enchant_added.armor.desc": "装備時、防御力をレベルごとに+0.4します。",
+  "enchantment.my_enchant_added.hardness": "ハードネス",
+  "enchantment.my_enchant_added.hardness.desc": "装備時、防具強度をレベルごとに+0.3します。",
+  "enchantment.my_enchant_added.haste": "ヘイスト",
+  "enchantment.my_enchant_added.haste.desc": "ブーツ装備時、移動速度をレベルごとに+7.5%します。",
+  "enchantment.my_enchant_added.ratio_sharpness": "割合鋭利",
+  "enchantment.my_enchant_added.ratio_sharpness.desc": "武器の攻撃力をレベルごとに+4%します。",
+  "enchantment.my_enchant_added.rock": "ロック",
+  "enchantment.my_enchant_added.rock.desc": "インベントリ上で右クリックしてロック/解除できます。ロック中はドロップやスロット移動、強制ドロップを無効化します。",
+  "enchantment.my_enchant_added.automatic_repair": "自動修復",
+  "enchantment.my_enchant_added.automatic_repair.desc": "毎tick最大耐久値の0.01%ずつ耐久力を回復します。",
+  "tooltip.my_enchant_added.rock.locked": "[ロック中] インベントリ内で右クリックで解除",
+  "tooltip.my_enchant_added.rock.unlocked": "[ロック解除中] インベントリ内で右クリックでロック"
+}
